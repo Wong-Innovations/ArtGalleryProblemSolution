@@ -2,6 +2,7 @@
 #define ARTGALLERY_HPP_
 
 #include <iostream>
+#include <vector>
 #include <cmath>
 #include "Graph.hpp"
 
@@ -11,6 +12,7 @@ private:
     Graph m_gallery;
 public:
     ArtGallery(const Graph &gallery);
+    vector<Point> solve();
 };
 
 ArtGallery::ArtGallery(const Graph &gallery) :

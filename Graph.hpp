@@ -38,14 +38,10 @@ private:
     vector<Vertex> m_adjList;
 public:
     Graph(const vector<Edge> &edge);
-
     Vertex * findVertex(const Point &point);
     void linkVertices(const Edge &edge, bool toggleRecursion = true);
-
     bool isClosed(); // A method to check whether a graph is closed
-
     void triangulate();
-
     friend ostream& operator<< (ostream &os, const Graph &obj);
 };
 
