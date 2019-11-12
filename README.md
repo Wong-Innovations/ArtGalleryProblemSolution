@@ -32,7 +32,7 @@ public:
 ```
 
 ## The Group
-[@Wong-Innovations](https://github.com/Wong-Innovations) \n
+[@Wong-Innovations](https://github.com/Wong-Innovations)  
 [@yokey21](https://github.com/yokey21)
 []()
 []()
