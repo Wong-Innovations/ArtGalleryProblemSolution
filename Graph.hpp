@@ -3,6 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
+
+#define MIN(x,y) (x < y ? x : y)
+#define MAX(x,y) (x > y ? x : y)
 
 using std::vector;
 using std::cout;
@@ -32,14 +36,24 @@ struct Vertex // A Point which is connected to one or more other points
     friend ostream& operator<< (ostream &os, const Vertex &v);
 };
 
+double dot(Point a, Point b, Point c) {
+    int segment1_x = a.x-b.x, segment1_y = a.y-b.y;
+    int segment2_x = c.x-b.x, segment2_y = c.y-b.y;
+    return (segment1_x*segment2_x + segment1_y*segment2_y);
+}
+
 class Graph // The actual graph structure
 {
 private:
     vector<Vertex> m_adjList;
+protected:
+    void linkVerticesUtil(const Edge &edge, bool toggleRecursion = true);
+    double interiorAngle(Point a, Point b, Point c) const; // returns interior angle ABC
+    bool midpointInGraph(Point a, Point b) const;
 public:
     Graph(const vector<Edge> &edge);
     Vertex * findVertex(const Point &point);
-    void linkVertices(const Edge &edge, bool toggleRecursion = true);
+    void linkVertices(const Edge &edge);
     bool isClosed(); // A method to check whether a graph is closed
     void triangulate();
     friend ostream& operator<< (ostream &os, const Graph &obj);
@@ -73,7 +87,49 @@ Vertex * Graph::findVertex(const Point &point) {
     return nullptr;
 }
 
-void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
+void Graph::linkVertices(const Edge &edge) {
+    linkVerticesUtil(edge);
+}
+
+bool Graph::midpointInGraph(Point a, Point b) const {
+    int counter = 0;
+    int i, N = m_adjList.size();
+    double xinters;
+    Point p1,p2;
+
+    double mid_x = (a.x + b.x)/2, mid_y = (a.y + b.y)/2;
+
+    p1 = m_adjList[0].src;
+    for (i = 1; i <= N; i++) {
+        p2 = m_adjList[i % N].src;
+        if (mid_y > MIN(p1.y,p2.y)) {
+            if (mid_y <= MAX(p1.y,p2.y)) {
+                if (mid_y <= MAX(p1.x,p2.x)) {
+                    if (p1.y != p2.y) {
+                        xinters = (mid_y-p1.y)*(p2.x-p1.x)/(p2.y-p1.y)+p1.x;
+                        if (p1.x == p2.x || mid_y <= xinters)
+                            counter++;
+                    }
+                }
+            }
+        }
+        p1 = p2;
+    }
+
+    return (counter % 2 == 0)? false : true;
+}
+
+double Graph::interiorAngle(Point a, Point b, Point c) const {
+    int segment1_x = a.x-b.x, segment1_y = a.y-b.y;
+    int segment2_x = c.x-b.x, segment2_y = c.y-b.y;
+    double segment1 = sqrt(pow(segment1_x, 2) + pow(segment1_y, 2));
+    double segment2 = sqrt(pow(segment2_x, 2) + pow(segment2_y, 2));
+
+    double theta = acos(dot(a,b,c) / (segment1*segment2));
+    return (midpointInGraph(a,c))? theta : (360-theta);
+}
+
+void Graph::linkVerticesUtil(const Edge &edge, bool toggleRecursion) {
     // Check for vertex in graph with src == edge.src
     if (findVertex(edge.src)) {
         for (size_t i = 0; i < m_adjList.size(); i++) {
@@ -81,57 +137,21 @@ void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
                 m_adjList[i].dest.push_back(edge.dest);
             }
         }
-
-        // // Double link functionality
-        // for (size_t i = 0; i < m_adjList.size(); i++) {
-        //     if (m_adjList[i].src == edge.dest) {
-        //         m_adjList[i].dest.push_back(edge.src);
-        //     }
-        // }
-        // for (size_t k = 0; k < m_adjList.size(); k++) {
-        //     for (size_t j = 0; j < m_adjList[k].dest.size(); j++) {
-        //         if (m_adjList[k].dest[j] == edge.src) {
-        //             m_adjList[k++].dest.push_back(edge.src);
-        //         }
-        //     }
-        // }
     } else {
-        // Spawning new vertex and inserting data
         Vertex newVertex;
         newVertex.src = edge.src;
         newVertex.dest.push_back(edge.dest);
         m_adjList.push_back(newVertex);
-
-        // // Double link functionality
-        // for (size_t i = 0; i < m_adjList.size(); i++) {
-        //     if (m_adjList[i].src == edge.dest) {
-        //         m_adjList[i].dest.push_back(edge.src);
-        //     }
-        // }
-        // for (size_t k = 0; k < m_adjList.size(); k++) {
-        //     for (size_t j = 0; j < m_adjList[k].dest.size(); j++) {
-        //         if (m_adjList[k].dest[j] == edge.src) {
-        //             m_adjList[k++].dest.push_back(edge.src);
-        //         }
-        //     }
-        // }
     }
 
     if (toggleRecursion) {
-        linkVertices(Edge { edge.dest , edge.src }, false);
+        linkVerticesUtil(Edge { edge.dest , edge.src }, false);
     }
 }
 
-// // WIP
-// Graph::triangulate() {
-//     for (size_t i = 0; i < m_adjList.size(); i++) {
-//         for (size_t j = 0; j < m_adjList[i].size(); j++) {
-//             if (m_adjList)
-//         }
-        
-//     }
+void Graph::triangulate() {
     
-// }
+}
 
 ostream& operator<< (ostream &os, const Vertex &v) {
     os << "{ " << v.src.x << " , " << v.src.y << " } --> ";
