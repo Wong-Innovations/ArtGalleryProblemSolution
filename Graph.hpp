@@ -8,7 +8,7 @@ using std::vector;
 using std::cout;
 using std::ostream;
 
-enum Color { None, Red, Yellow, Blue };
+enum Color { None, Red, Yellow, Blue }; //Color limited to these values (Enumeration declaration)
 
 struct Point // A tuple containing two ints
 {
@@ -24,10 +24,10 @@ struct Edge // A tuple containing two Points
 
 struct Vertex // A Point which is connected to one or more other points
 {
-    Point src;
-    vector<Point> dest;
+    Point src; //root point
+    vector<Point> dest; //vector of connected points
     int color = Color(None);
-    
+
     inline Vertex& operator= (const Vertex &rhs);
     friend ostream& operator<< (ostream &os, const Vertex &v);
 };
@@ -45,10 +45,10 @@ public:
     friend ostream& operator<< (ostream &os, const Graph &obj);
 };
 
-/* 
- * 
+/*
+ *
  * Function Definitions
- * 
+ *
  */
 
 bool operator== (const Point &lhs, const Point &rhs) {
@@ -81,40 +81,14 @@ void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
                 m_adjList[i].dest.push_back(edge.dest);
             }
         }
-
-        // // Double link functionality
-        // for (size_t i = 0; i < m_adjList.size(); i++) {
-        //     if (m_adjList[i].src == edge.dest) {
-        //         m_adjList[i].dest.push_back(edge.src);
-        //     }
-        // }
-        // for (size_t k = 0; k < m_adjList.size(); k++) {
-        //     for (size_t j = 0; j < m_adjList[k].dest.size(); j++) {
-        //         if (m_adjList[k].dest[j] == edge.src) {
-        //             m_adjList[k++].dest.push_back(edge.src);
-        //         }
-        //     }
-        // }
-    } else {
+    }
+    else
+    {
         // Spawning new vertex and inserting data
         Vertex newVertex;
         newVertex.src = edge.src;
         newVertex.dest.push_back(edge.dest);
         m_adjList.push_back(newVertex);
-
-        // // Double link functionality
-        // for (size_t i = 0; i < m_adjList.size(); i++) {
-        //     if (m_adjList[i].src == edge.dest) {
-        //         m_adjList[i].dest.push_back(edge.src);
-        //     }
-        // }
-        // for (size_t k = 0; k < m_adjList.size(); k++) {
-        //     for (size_t j = 0; j < m_adjList[k].dest.size(); j++) {
-        //         if (m_adjList[k].dest[j] == edge.src) {
-        //             m_adjList[k++].dest.push_back(edge.src);
-        //         }
-        //     }
-        // }
     }
 
     if (toggleRecursion) {
@@ -128,9 +102,9 @@ void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
 //         for (size_t j = 0; j < m_adjList[i].size(); j++) {
 //             if (m_adjList)
 //         }
-        
+
 //     }
-    
+
 // }
 
 ostream& operator<< (ostream &os, const Vertex &v) {

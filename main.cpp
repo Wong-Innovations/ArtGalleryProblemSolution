@@ -10,8 +10,8 @@ void defineGallery(vector<Edge> &edges);
 
 int main(void) {
   vector<Edge> edges;
-  defineGallery(edges);
-  Graph ag(edges);
+  defineGallery(edges); //pushes points into passed vector
+  Graph ag(edges); //Creates graph with given point, links vertices
 
   cout << ag;
 
