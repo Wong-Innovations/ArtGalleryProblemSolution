@@ -42,6 +42,64 @@ double dot(Point a, Point b, Point c) {
     return (segment1_x*segment2_x + segment1_y*segment2_y);
 }
 
+// Given three colinear points a, b, p, the function checks if
+// point p lies on line segment 'ab'
+bool onSegment(Point a, Point b, Point p)
+{
+    if (p.x < MAX(a.x, b.x) && p.x > MIN(a.x, b.x) &&
+        p.y < MAX(a.y, b.y) && p.y > MIN(a.y, b.y))
+    {
+      return true;
+    }
+    return false;
+}
+
+// The function returns following values
+// 0 --> p, q and r are colinear
+// 1 --> Clockwise
+// 2 --> Counterclockwise
+int orientation(Point p, Point q, Point r)
+{
+    int val = (q.y - p.y) * (r.x - q.x) -
+              (q.x - p.x) * (r.y - q.y);
+
+    if (val == 0) return 0;  // colinear
+
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+// The main function that returns true if line segment 'a1b1'
+// and 'a2b2' intersect.
+bool doIntersect(Point a1, Point b1, Point a2, Point b2)
+{
+    //FIX SO IT IGNORES COMMON VERTEX
+    // Find the four orientations needed for general and
+    // special cases
+    int o1 = orientation(a1, b1, a2);
+    int o2 = orientation(a1, b1, b2);
+    int o3 = orientation(a2, b2, a1);
+    int o4 = orientation(a2, b2, b1);
+
+    // General case
+    if (o1 != o2 && o3 != o4)
+        return true;
+
+    // Special Cases
+    // a1, b1 and a2 are colinear and a2 lies on segment a1b1
+    if (o1 == 0 && onSegment(a1, a2, b1)) return true;
+
+    // a1, b1 and b2 are colinear and b2 lies on segment a1q1
+    if (o2 == 0 && onSegment(a1, b2, b1)) return true;
+
+    // a2, b2 and a1 are colinear and a1 lies on segment a2b2
+    if (o3 == 0 && onSegment(a2, a1, b2)) return true;
+
+     // a2, b2 and b1 are colinear and b1 lies on segment a2b2
+    if (o4 == 0 && onSegment(a2, b1, b2)) return true;
+
+    return false; // Doesn't fall in any of the above cases
+}
+
 class Graph // The actual graph structure
 {
 private:
@@ -154,6 +212,36 @@ void Graph::linkVerticesUtil(const Edge &edge, bool toggleRecursion) {
     if (toggleRecursion) {
         linkVerticesUtil(Edge { edge.dest , edge.src }, false);
     }
+}
+
+//each vertex should have 2 destination vertices
+//must check for overlapping
+bool Graph::isClosed()
+{
+  //check each vertex has 2 destination points
+  for(int i = 0 ; i < m_adjList.size();i++)
+  {
+    if(m_adjList[i].dest.size()!=2)
+    {
+      return false;
+    }
+  }
+  //check if any edges cross
+  for(int i = 0 ; i < m_adjList.size()-1;i++)
+  {
+      for(int j= 0 ; j < m_adjList.size()-1;j++)
+      {
+        if(doIntersect(m_adjList[i].src, m_adjList[i].dest[0], m_adjList[i+1].src, m_adjList[i+1].dest[0]))
+        {
+          //BUG: int doIntersect: since connected at one point they are intersecting
+          cout << m_adjList[i] << std::endl;
+          cout << m_adjList[i+1] << std::endl;
+          return false;
+        }
+      }
+  }
+
+  return true;
 }
 
 // WIP

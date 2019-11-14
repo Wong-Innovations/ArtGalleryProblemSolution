@@ -5,15 +5,19 @@
 
 using std::vector;
 using std::cout;
+using std::endl;
 
 void defineGallery(vector<Edge> &edges);
 
-int main(void) {
+int main(void)
+{
   vector<Edge> edges;
   defineGallery(edges); //pushes points into passed vector
   Graph ag(edges); //Creates graph with given point, links vertices
 
-  cout << ag;
+  cout << ag.isClosed() << endl;
+
+  //cout << ag;
 
   return 0;
 }
