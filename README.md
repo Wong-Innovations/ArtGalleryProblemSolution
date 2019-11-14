@@ -1,5 +1,7 @@
 # ArtGalleryProblemSolution
-A C++ solution to the 2D Art Gallery Problem https://en.wikipedia.org/wiki/Art_gallery_problem
+A C++ solution to the 2D Art Gallery Problem https://en.wikipedia.org/wiki/Art_gallery_problem  
+
+Additional Information: https://www.autonomousrobotslab.com/uploads/5/8/4/4/58449511/cs302-bonus-assignment-2.pdf
 
 ## Objective
 Given an closed set of 2D points (which represent the walls of an art gallery), output a set of points where 360 degree cameras could be installed to monitor every wall of the gallery.
