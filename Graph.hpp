@@ -149,9 +149,10 @@ void Graph::linkVerticesUtil(const Edge &edge, bool toggleRecursion) {
     }
 }
 
-void Graph::triangulate() {
-    
-}
+// WIP
+// void Graph::triangulate() {
+
+// }
 
 ostream& operator<< (ostream &os, const Vertex &v) {
     os << "{ " << v.src.x << " , " << v.src.y << " } --> ";
