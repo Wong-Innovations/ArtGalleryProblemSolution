@@ -51,11 +51,13 @@ public:
  *
  */
 
-bool operator== (const Point &lhs, const Point &rhs) {
+bool operator== (const Point &lhs, const Point &rhs)
+{
     return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
 
-bool operator== ( const Edge &lhs, const Edge &rhs) {
+bool operator== ( const Edge &lhs, const Edge &rhs)
+{
     return (lhs.src == rhs.src && lhs.dest == rhs.dest);
 }
 
@@ -65,7 +67,8 @@ Graph::Graph(const vector<Edge> &edges)
         linkVertices(edges[i]);
 }
 
-Vertex * Graph::findVertex(const Point &point) {
+Vertex * Graph::findVertex(const Point &point)
+{
     for (size_t i = 0; i < m_adjList.size(); i++) {
         if (m_adjList[i].src == point)
             return &m_adjList[i];
@@ -73,9 +76,11 @@ Vertex * Graph::findVertex(const Point &point) {
     return nullptr;
 }
 
-void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
+void Graph::linkVertices(const Edge &edge, bool toggleRecursion)
+{
     // Check for vertex in graph with src == edge.src
-    if (findVertex(edge.src)) {
+    if (findVertex(edge.src))
+    {
         for (size_t i = 0; i < m_adjList.size(); i++) {
             if (m_adjList[i].src == edge.src) {
                 m_adjList[i].dest.push_back(edge.dest);
@@ -96,7 +101,7 @@ void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
     }
 }
 
-// // WIP
+// // WIP // connect vertices
 // Graph::triangulate() {
 //     for (size_t i = 0; i < m_adjList.size(); i++) {
 //         for (size_t j = 0; j < m_adjList[i].size(); j++) {
@@ -107,7 +112,8 @@ void Graph::linkVertices(const Edge &edge, bool toggleRecursion) {
 
 // }
 
-ostream& operator<< (ostream &os, const Vertex &v) {
+ostream& operator<< (ostream &os, const Vertex &v)
+{
     os << "{ " << v.src.x << " , " << v.src.y << " } --> ";
     for (size_t i = 0; i < v.dest.size(); i++)
         os << "{ " << v.dest[i].x << " , " << v.dest[i].y << " } ";
@@ -116,7 +122,8 @@ ostream& operator<< (ostream &os, const Vertex &v) {
 }
 
 ostream& operator<< (ostream &os, const Graph &obj) {
-    for(size_t i = 0; i < obj.m_adjList.size(); i++) {
+    for(size_t i = 0; i < obj.m_adjList.size(); i++)
+    {
         os << obj.m_adjList[i];
         os << '\n';
     }

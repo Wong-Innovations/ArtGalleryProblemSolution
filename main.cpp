@@ -18,6 +18,7 @@ int main(void) {
   return 0;
 }
 
+//will be user inputted points
 void defineGallery(vector<Edge> &edges) {
   edges.push_back(
     Edge {
