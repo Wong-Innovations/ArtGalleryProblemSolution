@@ -12,12 +12,22 @@ private:
     Graph m_gallery;
 public:
     ArtGallery(const Graph &gallery);
-    vector<Point> solve();
+    void solve();
 };
 
 ArtGallery::ArtGallery(const Graph &gallery) :
     m_gallery(gallery)
 {
+}
+
+void ArtGallery::solve() {
+    vector<Point> solution = m_gallery.triangulate();
+    for (int i = 0; i < solution.size(); i++) {
+        std::cout << "Place Security Cameras at the points: ["
+            << solution[i].x << ", "
+            << solution[i].y << "], ";
+    }
+    std::cout << std::endl;
 }
 
 #endif //ARTGALLERY_HPP_

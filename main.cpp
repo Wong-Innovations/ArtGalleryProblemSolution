@@ -13,7 +13,9 @@ int main(void) {
   defineGallery(edges);
   Graph ag(edges);
 
-  cout << ag;
+  ArtGallery gallery(ag);
+
+  gallery.solve();
 
   return 0;
 }
