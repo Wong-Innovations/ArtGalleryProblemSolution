@@ -47,7 +47,7 @@ public:
     Vertex * findVertex(const Point &point);
     void linkVertices(const Edge &edge);
     bool isClosed(); // A method to check whether a graph is closed
-    vector<Point> triangulate();
+    vector<Point>* triangulate();
     friend ostream& operator<< (ostream &os, const Graph &obj);
 };
 
@@ -104,10 +104,10 @@ void Graph::linkVerticesUtil(const Edge &edge, bool toggleRecursion) {
 }
 
 // WIP
-vector<Point> Graph::triangulate() {
+vector<Point>* Graph::triangulate() {
     vector<double> coords;
 
-    for (int i = 0; i < m_adjList.size(); i++) {
+    for (size_t i = 0; i < m_adjList.size(); i++) {
         coords.push_back(m_adjList[i].src.x);
         coords.push_back(m_adjList[i].src.y);
     }
@@ -115,13 +115,13 @@ vector<Point> Graph::triangulate() {
     //triangulation happens here
     delaunator::Delaunator d(coords);
 
-    vector<Point> solution;
+    vector<Point>* solution = new vector<Point>;
 
-    for (int i = 0; d.triangles.size(); i += 3) {
+    for (size_t i = 0; i < d.triangles.size(); i += 6) {
         Point temp;
         temp.x = d.coords[2 * d.triangles[i]];
         temp.y = d.coords[2 * d.triangles[i] + 1];
-        solution.push_back(temp);
+        solution->push_back(temp);
     }
     
     return solution;

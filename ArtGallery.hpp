@@ -21,11 +21,13 @@ ArtGallery::ArtGallery(const Graph &gallery) :
 }
 
 void ArtGallery::solve() {
-    vector<Point> solution = m_gallery.triangulate();
-    for (int i = 0; i < solution.size(); i++) {
-        std::cout << "Place Security Cameras at the points: ["
-            << solution[i].x << ", "
-            << solution[i].y << "], ";
+    vector<Point>* solution = m_gallery.triangulate();
+
+    std::cout << "Place Security Cameras at the points: ";
+    for (int i = 0; i < solution->size(); i++) {
+        std::cout << "["
+            << (*solution)[i].x << ", "
+            << (*solution)[i].y << "] ";
     }
     std::cout << std::endl;
 }
